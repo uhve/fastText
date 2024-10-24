@@ -28,7 +28,7 @@ import gzip
 try:
     from urllib.request import urlopen
 except ImportError:
-    from urllib2 import urlopen
+    from urllib2 import urlopen # type: ignore
 
 
 valid_lang_ids = {"af", "sq", "als", "am", "ar", "an", "hy", "as", "ast",
