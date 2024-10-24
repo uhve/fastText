@@ -13,7 +13,9 @@ import fasttext_pybind as fasttext
 import numpy as np
 import multiprocessing
 from itertools import chain
+from fasttext.util.util import _check_copy_if_needed
 
+copy_if_needed = _check_copy_if_needed()
 loss_name = fasttext.loss_name
 model_name = fasttext.model_name
 EOS = "</s>"
@@ -38,7 +40,7 @@ class _Meter:
         else:
             y_scores, y_true = ([], ())
 
-        return np.array(y_scores, copy=False), np.array(y_true, copy=False)
+        return np.array(y_scores, copy=copy_if_needed), np.array(y_true, copy=copy_if_needed)
 
     def precision_recall_curve(self, label=None):
         """Return precision/recall curve"""
@@ -53,7 +55,7 @@ class _Meter:
         else:
             precision, recall = ([], ())
 
-        return np.array(precision, copy=False), np.array(recall, copy=False)
+        return np.array(precision, copy=copy_if_needed), np.array(recall, copy=copy_if_needed)
 
     def precision_at_recall(self, recall, label=None):
         """Return precision for a given recall"""
@@ -236,7 +238,7 @@ class _FastText:
             else:
                 probs, labels = ([], ())
 
-            return labels, np.array(probs, copy=False)
+            return labels, np.array(probs, copy=copy_if_needed)
 
     def get_input_matrix(self):
         """
