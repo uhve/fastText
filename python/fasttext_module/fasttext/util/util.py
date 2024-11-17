@@ -207,3 +207,21 @@ def download_model(lang_id, if_exists='strict', dimension=None):
                 shutil.copyfileobj(f, f_out)
 
     return file_name
+
+
+def _check_copy_if_needed():
+    copy_if_needed = None
+
+    if np.lib.NumpyVersion(np.version) >= "2.0.0":
+        copy_if_needed = None
+    elif np.lib.NumpyVersion(np.version) < "1.28.0":
+        copy_if_needed = False
+    else:
+        # 2.0.0 dev versions, handle cases where copy may or may not exist
+        try:
+            np.array([1]).array(copy=None)  # type: ignore[call-overload]
+            copy_if_needed = None
+        except TypeError:
+            copy_if_needed = False
+
+    return copy_if_needed
